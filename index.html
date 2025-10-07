@@ -1,413 +1,246 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <title>🐾 ¡Misión Cumpleaños en Apuros! 🐶</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --azul: #2563eb;
-        --rojo: #ef4444;
-        --amarillo: #fde047;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🐾 ¡Misión Cumpleaños en Apuros! 🐶</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --azul: #2563eb;
+      --amarillo: #fde047;
+    }
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: "Baloo 2", cursive;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      height: 100vh;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;
+    }
+    .video-bg {
+      position:fixed;inset:0;width:100%;height:100%;
+      object-fit:cover;z-index:0;opacity:.4;
+    }
+    .container {
+      position:relative;z-index:2;width:95%;max-width:480px;height:90vh;
+      background:rgba(255,255,255,0.15);backdrop-filter:blur(25px);
+      border-radius:30px;box-shadow:0 8px 25px rgba(0,0,0,0.3);
+      overflow:hidden;border:2px solid rgba(255,255,255,0.3);
+    }
+    .slide {
+      position:absolute;inset:0;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      opacity:0;transform:translateX(100%);
+      transition:opacity .8s ease,transform .8s ease;
+      padding:1rem;
+    }
+    .slide.active{opacity:1;transform:translateX(0);}
+    h1 {
+      font-family:"Fredoka One",cursive;text-align:center;
+      font-size:2.2rem;color:var(--amarillo);
+      -webkit-text-stroke:1px #000;
+      text-shadow:1px 1px 3px rgba(0,0,0,0.8),0 0 10px rgba(255,255,255,0.5);
+      margin-bottom:.5rem;
+    }
+    p {font-size:1.15rem;margin:.7rem auto;text-align:center;width:85%;color:#f8fafc;text-shadow:0 0 6px rgba(0,0,0,0.6);}
+    .hero-name {
+      display:inline-block;font-size:2rem;color:#ffec85;font-family:"Fredoka One",cursive;
+      -webkit-text-stroke:1px #000;text-shadow:0 0 12px rgba(255,255,255,0.6),0 0 25px #3b82f6;
+      animation:heroGlow 2s ease-in-out infinite alternate,heroEntrance 1.2s ease forwards;
+    }
+    @keyframes heroGlow{0%{text-shadow:0 0 8px #60a5fa,0 0 18px #2563eb;}100%{text-shadow:0 0 15px #3b82f6,0 0 35px #93c5fd;}}
+    @keyframes heroEntrance{0%{opacity:0;transform:scale(0.6);}100%{opacity:1;transform:scale(1);}}
+    .btn{
+      background:linear-gradient(90deg,#3b82f6,#60a5fa);border:none;border-radius:30px;
+      padding:.9rem 2rem;margin-top:1.2rem;color:#fff;font-weight:bold;font-size:1rem;
+      cursor:pointer;transition:transform .3s;box-shadow:0 0 10px rgba(59,130,246,0.7);
+      animation:pulseGlow 3s infinite alternate;text-align:center;
+    }
+    @keyframes pulseGlow{0%{box-shadow:0 0 10px rgba(59,130,246,0.6);}100%{box-shadow:0 0 25px rgba(37,99,235,0.9);}}
+    .btn:hover{transform:scale(1.08);}
+    .btn-alt{
+      background:linear-gradient(90deg,#ef4444,#f87171);
+      animation:pulseRed 3s infinite alternate;
+    }
+    @keyframes pulseRed{
+      0%{box-shadow:0 0 10px rgba(239,68,68,0.6);}100%{box-shadow:0 0 25px rgba(248,113,113,0.9);}
+    }
+    nav{position:absolute;bottom:20px;width:100%;display:flex;justify-content:center;gap:10px;}
+    .dot{width:12px;height:12px;border-radius:50%;background:#64748b;}
+    .dot.active{background:var(--amarillo);box-shadow:0 0 8px var(--amarillo);}
+    .character{position:absolute;width:140px;pointer-events:none;filter:drop-shadow(0 6px 8px rgba(0,0,0,0.4));animation:bounce 4s ease-in-out infinite alternate;transition:opacity .6s ease;}
+    .chase{left:-5px;bottom:-5px;}
+    .marshall{right:-5px;bottom:-5px;}
+    @keyframes bounce{0%{transform:translateY(0);}50%{transform:translateY(-10px);}100%{transform:translateY(0);}}
+    .logo{width:160px;position:absolute;top:5px;left:50%;transform:translateX(-50%);z-index:10;}
+    .confetti{position:fixed;top:-10px;width:8px;height:12px;opacity:.9;animation:fall linear infinite;z-index:1;}
+    @keyframes fall{0%{transform:translateY(0) rotate(0deg);}100%{transform:translateY(110vh) rotate(360deg);}}
+    .star{position:fixed;top:-10px;width:5px;height:5px;border-radius:50%;background:white;box-shadow:0 0 8px white;animation:fallStar linear infinite;z-index:998;}
+    @keyframes fallStar{0%{transform:translateY(0);}100%{transform:translateY(110vh);}}
+    .firework{position:fixed;width:4px;height:4px;border-radius:50%;opacity:.9;pointer-events:none;animation:burst 1.4s ease-out forwards;z-index:999;}
+    @keyframes burst{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(var(--x),var(--y)) scale(0.5);opacity:0;}}
+    .static-star {
+      position:fixed;width:2px;height:2px;background:white;border-radius:50%;
+      box-shadow:0 0 6px white;z-index:0;animation:twinkle 3s infinite alternate ease-in-out;
+    }
+    @keyframes twinkle {from{opacity:.4;}to{opacity:1;}}
+    .intro{
+      position:fixed;inset:0;z-index:100;
+      background:radial-gradient(circle,#1e3a8a,#000);
+      display:flex;align-items:center;justify-content:center;
+      animation:fadeOut 3.5s ease 3s forwards;
+    }
+    .intro h2{
+      font-size:2rem;font-family:"Fredoka One",cursive;color:#facc15;-webkit-text-stroke:1px #000;
+      text-shadow:0 0 15px #3b82f6,0 0 30px #1e3a8a,0 0 60px #60a5fa;
+      animation:pulseGlowBlue 1.6s infinite;
+      text-align:center;padding:0 1rem;
+    }
+    @keyframes pulseGlowBlue{0%{text-shadow:0 0 8px #60a5fa,0 0 20px #3b82f6;}50%{text-shadow:0 0 25px #3b82f6,0 0 50px #93c5fd;}100%{text-shadow:0 0 10px #60a5fa,0 0 25px #2563eb;}}
+    @keyframes fadeOut{to{opacity:0;visibility:hidden;}}
+    @media (max-width:600px){h1{font-size:1.8rem;}p{font-size:1rem;}.hero-name{font-size:1.5rem;}.character{width:110px;}}
+  </style>
+</head>
+
+<body>
+  <video autoplay muted loop class="video-bg">
+    <source src="./paw.mp4" type="video/mp4" />
+  </video>
+
+  <div class="intro">
+    <h2>🚨 ¡Alerta de misión! Iniciando protocolo de rescate...</h2>
+  </div>
+
+  <img src="https://i.pinimg.com/originals/e8/6c/18/e86c188b0eb75d94040999c0d5f14666.png" class="logo" />
+
+  <div class="container">
+    <section class="slide active">
+      <h1>🚨 ¡Alerta en Bahía Aventura!</h1>
+      <p><span class="hero-name">¡Hola, soy <strong>Nadir Rosas</strong>! 🐾</span><br/>
+        El alcalde Humdinger ha robado mi pastel 🎂.<br/><br/>
+        ¡Necesito tu ayuda para recuperarlo y celebrar mis <strong>3 años</strong>!</p>
+      <button class="btn" onclick="nextSlide()">➡️ Aceptar misión</button>
+    </section>
+
+    <section class="slide">
+      <h1>🐶 ¡Hora de reunir a la Patrulla Canina!</h1>
+      <p>Chase 🚓, Marshall 🚒 y Skye 🛩️ ya están listos,<br/>
+      pero... ¡necesitamos más héroes para completar el equipo! 💪</p>
+      <button class="btn" onclick="nextSlide()">➡️ ¡Sí, cuenta conmigo!</button>
+    </section>
+
+    <section class="slide">
+      <h1>🎉 ¡Misión: Fiesta Rescatada!</h1>
+      <p>Ven a celebrar en nuestra base secreta 🏠:<br/><br/>
+      📅 <strong>Sábado 18 de octubre</strong><br/>
+      🕓 <strong>7:00 p.m.</strong><br/>
+      📍 Mz Y3 Lote 7, Urb. Los Licenciados – Ventanilla<br/>
+      🧭 Frente al Colegio San Pedro Nolasco<br/><br/>
+      ¡Te esperamos para celebrar con ladridos y pastel! 🐾</p>
+      <p id="contador">⏳ Calculando días restantes...</p>
+      <button class="btn" onclick="nextSlide()">➡️ Finalizar misión</button>
+    </section>
+
+    <section class="slide" id="final">
+      <h1>🌟 ¡Misión cumplida! 🌟</h1>
+      <p>¡Gracias por unirte a la Patrulla Canina para salvar la fiesta de Nadir!<br/>🎇🎂🐾 ¡Ahora... celebremos juntos!</p>
+      <input id="nombreInvitado" type="text" placeholder="Tu nombre" style="padding:.6rem;border-radius:20px;border:none;text-align:center;margin-top:.5rem;" />
+      <button class="btn" onclick="confirmar()">💬 Confirmar asistencia</button>
+      <a href="https://maps.app.goo.gl/HqakQL1Lj5ysdQ1q7" target="_blank" class="btn btn-alt">📍 Ver mapa</a>
+    </section>
+
+    <nav>
+      <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </nav>
+
+    <img src="https://i0.wp.com/eltallerdehector.com/wp-content/uploads/2022/08/paw-patrol-png-chase.png?w=800&ssl=1" class="character chase"/>
+    <img src="https://i0.wp.com/eltallerdehector.com/wp-content/uploads/2022/08/paw-patrol-png-bombero.png?resize=768%2C768&ssl=1" class="character marshall"/>
+  </div>
+
+  <audio id="music" loop>
+    <source src="./paw.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const slides=document.querySelectorAll(".slide"),dots=document.querySelectorAll(".dot"),
+    chase=document.querySelector(".chase"),marshall=document.querySelector(".marshall"),
+    logo=document.querySelector(".logo"),music=document.getElementById("music");
+    let current=0,confettiInterval,fireworkInterval,starFieldCreated=false;
+    const colores=["#f87171","#60a5fa","#facc15","#4ade80","#a78bfa","#f472b6"];
+
+    function lanzarConfeti(){for(let i=0;i<6;i++){const c=document.createElement("div");
+      c.classList.add("confetti");c.style.backgroundColor=colores[Math.floor(Math.random()*colores.length)];
+      c.style.left=Math.random()*100+"vw";c.style.animationDuration=3+Math.random()*4+"s";
+      document.body.appendChild(c);setTimeout(()=>c.remove(),6000);}}
+    confettiInterval=setInterval(lanzarConfeti,500);
+
+    function nextSlide(){
+      slides[current].classList.remove("active");dots[current].classList.remove("active");
+      current=(current+1)%slides.length;slides[current].classList.add("active");dots[current].classList.add("active");
+      if(current===3){
+        clearInterval(confettiInterval);
+        chase.style.opacity="1";marshall.style.opacity="1";logo.style.opacity="1";
+        iniciarFuegosPermanentes();
+        if(!starFieldCreated) crearCieloEstrellado();
+      } else if(current>=2){
+        chase.style.opacity="0";marshall.style.opacity="0";logo.style.opacity="0";
+      } else {
+        chase.style.opacity="1";marshall.style.opacity="1";logo.style.opacity="1";
       }
+    }
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      html, body {
-        height: 100%;
-        overflow: hidden;
-      }
-
-      body {
-        font-family: "Baloo 2", cursive;
-        background: radial-gradient(circle at top, #0f172a, #020617);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-      }
-
-      .video-bg {
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: 0;
-        opacity: 0.4;
-      }
-
-      .container {
-        position: relative;
-        z-index: 2;
-        width: 94%;
-        max-width: 480px;
-        height: 100dvh;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(20px);
-        border-radius: 25px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      .slide {
-        position: absolute;
-        inset: 0;
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transform: translateX(100%);
-        transition: opacity 0.8s ease, transform 0.8s ease;
-      }
-      .slide.active {
-        opacity: 1;
-        transform: translateX(0);
-      }
-
-      h1 {
-        font-family: "Fredoka One", cursive;
-        text-align: center;
-        font-size: clamp(1.6rem, 6vw, 2.2rem);
-        color: var(--amarillo);
-        -webkit-text-stroke: 1px #000;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8),
-          0 0 10px rgba(255, 255, 255, 0.5);
-        margin-bottom: 0.6rem;
-      }
-
-      p {
-        font-size: clamp(1rem, 4vw, 1.15rem);
-        margin: 0.6rem auto;
-        text-align: center;
-        width: 88%;
-        color: #f8fafc;
-        text-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
-        line-height: 1.4em;
-      }
-
-      .hero-name {
-        display: inline-block;
-        font-size: clamp(1.3rem, 5vw, 2rem);
-        color: #ffec85;
-        font-family: "Fredoka One", cursive;
-        -webkit-text-stroke: 1px #000;
-        text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 0 25px #3b82f6;
-        animation: heroGlow 2s ease-in-out infinite alternate;
-      }
-
-      @keyframes heroGlow {
-        0% { text-shadow: 0 0 8px #60a5fa, 0 0 18px #2563eb; }
-        100% { text-shadow: 0 0 15px #3b82f6, 0 0 35px #93c5fd; }
-      }
-
-      .btn {
-        background: linear-gradient(90deg, #3b82f6, #60a5fa);
-        border: none;
-        border-radius: 40px;
-        padding: 1rem 2rem;
-        margin-top: 1rem;
-        color: #fff;
-        font-weight: bold;
-        font-size: 1.1rem;
-        cursor: pointer;
-        transition: transform 0.3s;
-        box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
-        width: 80%;
-        max-width: 300px;
-      }
-      .btn:hover {
-        transform: scale(1.07);
-      }
-
-      .btn-alt {
-        background: linear-gradient(90deg, #ef4444, #f87171);
-        box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
-      }
-
-      nav {
-        position: absolute;
-        bottom: 15px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-      }
-
-      .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #64748b;
-      }
-      .dot.active {
-        background: var(--amarillo);
-        box-shadow: 0 0 8px var(--amarillo);
-      }
-
-      .character {
-        position: absolute;
-        width: clamp(100px, 25vw, 150px);
-        pointer-events: none;
-        filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4));
-        animation: bounce 4s ease-in-out infinite alternate;
-        transition: opacity 0.6s ease;
-      }
-      .chase { left: 0; bottom: 0; }
-      .marshall { right: 0; bottom: 0; }
-
-      @keyframes bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-      }
-
-      .logo {
-        width: clamp(120px, 30vw, 180px);
-        position: absolute;
-        top: 5px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
-      }
-
-      /* Intro */
-      .intro {
-        position: fixed;
-        inset: 0;
-        z-index: 2000;
-        background: radial-gradient(circle, #1e3a8a, #000);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 1rem;
-        animation: fadeOut 3.5s ease 3s forwards;
-      }
-      .intro h2 {
-        font-size: clamp(1.4rem, 6vw, 2rem);
-        font-family: "Fredoka One", cursive;
-        color: #facc15;
-        -webkit-text-stroke: 1px #000;
-        text-shadow: 0 0 15px #3b82f6, 0 0 30px #1e3a8a, 0 0 60px #60a5fa;
-        animation: pulseGlowBlue 1.6s infinite;
-      }
-
-      @keyframes pulseGlowBlue {
-        0% { text-shadow: 0 0 8px #60a5fa, 0 0 20px #3b82f6; }
-        50% { text-shadow: 0 0 25px #3b82f6, 0 0 50px #93c5fd; }
-        100% { text-shadow: 0 0 10px #60a5fa, 0 0 25px #2563eb; }
-      }
-
-      @keyframes fadeOut {
-        to { opacity: 0; visibility: hidden; }
-      }
-
-      /* Efectos */
-      .confetti, .star, .firework {
-        position: fixed; pointer-events: none;
-      }
-
-      @media (max-width: 480px) {
-        .btn { font-size: 1rem; padding: 0.8rem 1.5rem; }
-        .container { border-radius: 20px; }
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- 🚨 Intro -->
-    <div class="intro">
-      <h2>🚨 ¡Alerta de misión! Iniciando protocolo de rescate...</h2>
-    </div>
-
-    <video autoplay muted loop class="video-bg">
-      <source src="./video.mp4" type="video/mp4" />
-    </video>
-
-    <img
-      src="https://i.pinimg.com/originals/e8/6c/18/e86c188b0eb75d94040999c0d5f14666.png"
-      class="logo"
-    />
-
-    <div class="container">
-      <section class="slide active">
-        <h1>🚨 ¡Alerta en Bahía Aventura!</h1>
-        <p>
-          <span class="hero-name">¡Hola, soy <strong>Nadir Rosas</strong>! 🐾</span><br />
-          El alcalde Humdinger ha robado mi pastel 🎂.<br /><br />
-          ¡Necesito tu ayuda para recuperarlo y celebrar mis <strong>3 años</strong>!
-        </p>
-        <button class="btn" onclick="nextSlide()">➡️ Aceptar misión</button>
-      </section>
-
-      <section class="slide">
-        <h1>🐶 ¡Hora de reunir a la Patrulla Canina!</h1>
-        <p>
-          Chase 🚓, Marshall 🚒 y Skye 🛩️ ya están listos,<br />
-          pero... ¡necesitamos más héroes para completar el equipo! 💪
-        </p>
-        <button class="btn" onclick="nextSlide()">➡️ ¡Sí, cuenta conmigo!</button>
-      </section>
-
-      <section class="slide">
-        <h1>🎉 ¡Misión: Fiesta Rescatada!</h1>
-        <p>
-          Ven a celebrar en nuestra base secreta 🏠:<br /><br />
-          📅 <strong>Sábado 18 de octubre</strong><br />
-          🕓 <strong>7:00 p.m.</strong><br />
-          📍 Mz Y3 Lote 7, Urb. Los Licenciados – Ventanilla<br />
-          🧭 Frente al Colegio San Pedro Nolasco
-        </p>
-        <a href="https://maps.app.goo.gl/HqakQL1Lj5ysdQ1q7" target="_blank" class="btn btn-alt">
-          📍 Ver ubicación GPS
-        </a>
-        <p id="contador">⏳ Calculando días restantes...</p>
-        <button class="btn" onclick="nextSlide()">➡️ Finalizar misión</button>
-      </section>
-
-      <section class="slide">
-        <h1>🌟 ¡Misión cumplida! 🌟</h1>
-        <p>
-          ¡Gracias por unirte a la Patrulla Canina para salvar la fiesta de Nadir!<br />
-          ¡Ahora... celebremos con estrellas y fuegos artificiales! 🎇🎂🐾
-        </p>
-        <button class="btn" onclick="confirmar()">💬 Confirmar asistencia</button>
-      </section>
-
-      <nav>
-        <div class="dot active"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </nav>
-
-      <img src="https://i0.wp.com/eltallerdehector.com/wp-content/uploads/2022/08/paw-patrol-png-chase.png?w=800&ssl=1" class="character chase" />
-      <img src="https://i0.wp.com/eltallerdehector.com/wp-content/uploads/2022/08/paw-patrol-png-bombero.png?resize=768%2C768&ssl=1" class="character marshall" />
-    </div>
-
-    <audio id="music" loop>
-      <source src="./paw.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="explosion">
-      <source src="./fireworks.mp3" type="audio/mpeg" />
-    </audio>
-
-    <script>
-      const slides = document.querySelectorAll(".slide");
-      const dots = document.querySelectorAll(".dot");
-      const chase = document.querySelector(".chase");
-      const marshall = document.querySelector(".marshall");
-      const logo = document.querySelector(".logo");
-      const music = document.getElementById("music");
-      const boom = document.getElementById("explosion");
-      let current = 0;
-      let confettiInterval;
-
-      const colores = ["#f87171", "#60a5fa", "#facc15", "#4ade80", "#a78bfa", "#f472b6"];
-
-      document.addEventListener("click", iniciarMusica, { once: true });
-      function iniciarMusica() { music.play().catch(()=>{}); }
-
-      function lanzarConfeti() {
-        const cantidad = window.innerWidth < 480 ? 3 : 6;
-        for (let i = 0; i < cantidad; i++) {
-          const c = document.createElement("div");
-          c.classList.add("confetti");
-          c.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
-          c.style.left = Math.random() * 100 + "vw";
-          c.style.animation = `fall ${3 + Math.random() * 4}s linear`;
-          document.body.appendChild(c);
-          setTimeout(() => c.remove(), 6000);
+    function crearFuegos(){
+      for(let i=0;i<5;i++){
+        const x=Math.random()*window.innerWidth;
+        const y=Math.random()*(window.innerHeight*0.5);
+        for(let j=0;j<40;j++){
+          const fw=document.createElement("div");
+          fw.classList.add("firework");
+          const angle=(j/40)*2*Math.PI;
+          const radius=100+Math.random()*80;
+          fw.style.left=`${x}px`;
+          fw.style.top=`${y}px`;
+          fw.style.backgroundColor=colores[Math.floor(Math.random()*colores.length)];
+          fw.style.setProperty("--x",`${Math.cos(angle)*radius}px`);
+          fw.style.setProperty("--y",`${Math.sin(angle)*radius}px`);
+          document.body.appendChild(fw);
+          setTimeout(()=>fw.remove(),1500);
         }
       }
-      confettiInterval = setInterval(lanzarConfeti, 700);
+    }
 
-      function nextSlide() {
-        slides[current].classList.remove("active");
-        dots[current].classList.remove("active");
-        current = (current + 1) % slides.length;
-        slides[current].classList.add("active");
-        dots[current].classList.add("active");
+    function iniciarFuegosPermanentes(){
+      if(fireworkInterval) clearInterval(fireworkInterval);
+      crearFuegos();
+      fireworkInterval=setInterval(crearFuegos,2500);
+    }
 
-        if (current >= 2) {
-          chase.style.opacity = "0";
-          marshall.style.opacity = "0";
-          logo.style.opacity = "0";
-        } else {
-          chase.style.opacity = "1";
-          marshall.style.opacity = "1";
-          logo.style.opacity = "1";
-        }
-
-        if (current === 3) {
-          clearInterval(confettiInterval);
-          lanzarEstrellasYFuegos();
-        }
+    function crearCieloEstrellado(){
+      for(let i=0;i<120;i++){
+        const s=document.createElement("div");
+        s.classList.add("static-star");
+        s.style.left=Math.random()*100+"vw";
+        s.style.top=Math.random()*100+"vh";
+        s.style.animationDuration=(2+Math.random()*4)+"s";
+        document.body.appendChild(s);
       }
+      starFieldCreated=true;
+    }
 
-      function lanzarEstrellasYFuegos() {
-        for (let i = 0; i < 60; i++) {
-          const star = document.createElement("div");
-          star.classList.add("star");
-          star.style.left = Math.random() * 100 + "vw";
-          star.style.animation = `fallStar ${3 + Math.random() * 3}s linear`;
-          document.body.appendChild(star);
-          setTimeout(() => star.remove(), 5000);
-        }
+    function confirmar(){
+      const nombre=document.getElementById("nombreInvitado").value.trim()||"un invitado";
+      const msg=encodeURIComponent(`¡Hola! Soy ${nombre} y confirmo mi asistencia al cumpleaños de Nadir Rosas`);
+      window.open(`https://wa.me/51953515933?text=${msg}`,"_blank");
+    }
 
-        setTimeout(() => {
-          boom.currentTime = 0;
-          boom.play();
-          for (let i = 0; i < 4; i++) {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * (window.innerHeight * 0.5);
-            for (let j = 0; j < 35; j++) {
-              const fw = document.createElement("div");
-              fw.classList.add("firework");
-              const angle = (j / 35) * 2 * Math.PI;
-              const radius = 90 + Math.random() * 70;
-              fw.style.left = `${x}px`;
-              fw.style.top = `${y}px`;
-              fw.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
-              fw.style.setProperty("--x", `${Math.cos(angle) * radius}px`);
-              fw.style.setProperty("--y", `${Math.sin(angle) * radius}px`);
-              document.body.appendChild(fw);
-              setTimeout(() => fw.remove(), 1500);
-            }
-          }
-        }, 1500);
-      }
+    window.addEventListener("load",()=>setTimeout(()=>music.play(),2000));
 
-      function confirmar() {
-        const msg = encodeURIComponent("¡Hola! Confirmo mi asistencia al cumpleaños de Nadir Rosas 🎂🐾");
-        window.open(`https://wa.me/51953515933?text=${msg}`, "_blank");
-      }
-
-      const evento = new Date("2025-10-18T19:00:00-05:00").getTime();
-      const cont = document.getElementById("contador");
-      setInterval(() => {
-        if (!cont) return;
-        const now = new Date().getTime();
-        const diff = evento - now;
-        if (diff <= 0) { cont.textContent = "🎉 ¡Hoy es el gran día!"; return; }
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        cont.textContent = `⏳ Faltan ${d} días y ${h} horas para la fiesta 🥳`;
-      }, 1000);
-    </script>
-  </body>
+    const evento=new Date("2025-10-18T19:00:00-05:00").getTime(),cont=document.getElementById("contador");
+    if(cont){setInterval(()=>{const now=new Date().getTime(),diff=evento-now;
+      if(diff<=0){cont.textContent="🎉 ¡Hoy es el gran día!";return;}
+      const d=Math.floor(diff/(1000*60*60*24)),h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+      cont.textContent=`⏳ Faltan ${d} días y ${h} horas para la fiesta 🥳`;},1000);}
+  </script>
+</body>
 </html>
